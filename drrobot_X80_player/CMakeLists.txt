@@ -1,10 +1,12 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(drrobot_X80_player)
 
+
+
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS DrRobotMotionSensorDriver geometry_msgs nav_msgs roscpp roslib rospy sensor_msgs std_msgs tf message_generation)
+find_package(catkin REQUIRED COMPONENTS DrRobotMotionSensorDriver geometry_msgs nav_msgs roscpp roslib rospy sensor_msgs std_msgs tf std_msgs visualization_msgs message_generation)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -29,6 +31,8 @@ find_package(catkin REQUIRED COMPONENTS DrRobotMotionSensorDriver geometry_msgs 
    Range.msg
    RangeArray.msg
    StandardSensor.msg
+   WheelVelocities.msg
+   WaypointArray.msg
  )
 
 ## Generate services in the 'srv' folder
@@ -41,7 +45,7 @@ find_package(catkin REQUIRED COMPONENTS DrRobotMotionSensorDriver geometry_msgs 
 ## Generate added messages and services with any dependencies listed here
  generate_messages(
    DEPENDENCIES
-   geometry_msgs   nav_msgs   sensor_msgs   std_msgs
+   geometry_msgs   nav_msgs   sensor_msgs   std_msgs visualization_msgs
  )
 
 ###################################
@@ -78,18 +82,30 @@ include_directories(include
 add_executable(drrobot_X80_player_node src/drrobot_player.cpp)
 add_executable(drrobot_X80_keyboard_teleop_node src/drrobot_keyboard_teleop.cpp)
 
+add_executable(auto_steering_node src/collisionAvoidence.cpp)
+add_executable(points_and_lines src/points_and_lines.cpp)
+add_executable(marker src/marker.cpp)
+add_executable(simple_navigation_goals src/simple_navigation_goals.cpp)
+add_executable(PID_goals src/PID_gotogoal.cpp)
+add_executable(calibration src/calibration.cpp)
+
+
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 # add_dependencies(drrobot_X80_player_node drrobot_X80_player_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
- target_link_libraries(drrobot_X80_player_node
-   ${catkin_LIBRARIES} DrRobotMotionSensorDriver
- )
+target_link_libraries(drrobot_X80_player_node ${catkin_LIBRARIES} DrRobotMotionSensorDriver)
 target_link_libraries(drrobot_X80_keyboard_teleop_node ${catkin_LIBRARIES})
-
+target_link_libraries(auto_steering_node ${catkin_LIBRARIES})
+target_link_libraries(points_and_lines ${catkin_LIBRARIES})
+target_link_libraries(marker ${catkin_LIBRARIES})
+target_link_libraries(simple_navigation_goals ${catkin_LIBRARIES})
+target_link_libraries(PID_goals ${catkin_LIBRARIES})
+target_link_libraries(calibration ${catkin_LIBRARIES})
 
 #############
+
 ## Install ##
 #############
 

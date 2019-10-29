@@ -1,2 +1,2 @@
 #this message will be used for IR ranger sensor and ultrasonic range sensor
-Range[] ranges
+sensor_msgs/Range[] ranges

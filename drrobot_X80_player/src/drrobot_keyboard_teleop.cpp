@@ -73,10 +73,10 @@ Publishes to (name / type):
 #define KEYCODE_A 0x61
 #define KEYCODE_S 0x73
 #define KEYCODE_D 0x64
-#define KEYCODE_W_CAP 0x57
+/*#define KEYCODE_W_CAP 0x57
 #define KEYCODE_A_CAP 0x41
 #define KEYCODE_S_CAP 0x53
-#define KEYCODE_D_CAP 0x44
+#define KEYCODE_D_CAP 0x44*/
 
 
 
@@ -90,7 +90,7 @@ class DrRobotKeyboardTeleopNode
     public:
         DrRobotKeyboardTeleopNode()
         {
-            pub_ = n_.advertise<geometry_msgs::Twist>("drrobot_cmd_vel", 1);
+            pub_ = n_.advertise<geometry_msgs::Twist>("cmd_vel", 1);
             ros::NodeHandle n_private("~");
         }
 
@@ -185,27 +185,27 @@ void DrRobotKeyboardTeleopNode::keyboardLoop()
         switch(c)
         {
             case KEYCODE_W:
-                maxVel = 0.25;
+                maxVel = 0.35;
                 maxTurn = 0;
                 dirty = true;
                 break;
             case KEYCODE_S:
-                maxVel = -0.125;
+                maxVel = -0.35;
                 maxTurn = 0;
                 dirty = true;
                 break;
             case KEYCODE_A:
                 maxVel = 0;
-                maxTurn = 0.5;
+                maxTurn = 0.6;
                 dirty = true;
                 break;
             case KEYCODE_D:
                 maxVel = 0;
-                maxTurn = -0.5;
+                maxTurn = -0.6;
                 dirty = true;
                 break;
 
-            case KEYCODE_W_CAP:
+            /*case KEYCODE_W_CAP:
                 maxVel = 1.0;
                 maxTurn = 0;
                 dirty = true;
@@ -224,7 +224,7 @@ void DrRobotKeyboardTeleopNode::keyboardLoop()
                 maxVel = 0;
                 maxTurn = -1.0;
                 dirty = true;
-                break;
+                break;*/
 
             default:
                 maxTurn = 0;

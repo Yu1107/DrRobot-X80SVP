@@ -51,6 +51,23 @@
 #include <boost/shared_ptr.hpp>
 #include <poll.h>
 
+#include <ros/ros.h>
+#include <tf/transform_broadcaster.h>
+#include <tf/transform_listener.h>
+#include <nav_msgs/Odometry.h>
+#include <geometry_msgs/Twist.h>
+#include <std_msgs/Float64.h>
+#include <std_msgs/Int32.h>
+
+#include <drrobot_X80_player/MotorInfo.h>
+#include <drrobot_X80_player/MotorInfoArray.h>
+#include <drrobot_X80_player/RangeArray.h>
+#include <sensor_msgs/Range.h>
+#include <drrobot_X80_player/PowerInfo.h>
+#include <drrobot_X80_player/StandardSensor.h>
+#include <drrobot_X80_player/CustomSensor.h>
+#include <drrobot_X80_player/WheelVelocities.h>
+
 
 //! A namespace containing the DrRobot Motion/Sensor driver
 namespace DrRobot_MotionSensorDriver
@@ -513,8 +530,20 @@ namespace DrRobot_MotionSensorDriver
      *          If successfully sending command, it will return the byte numbers of sending message.
      */
     int sendPowerCtrlCmd(const int cmd);
+    //void publishOdometry(const drrobot_X80_player::MotorInfoArray& motorInfo);
+    ros::Publisher range_cloud_pub_;
 
   private:
+
+          /*  std::string odom_frame_id_;
+            float m_x;
+            float m_y;
+            float m_theta;
+            tf::TransformBroadcaster m_odom_broadcaster;
+            ros::Publisher m_odom_pub;
+            ros::Publisher m_joint_state;*/
+            
+
     BYTE _recBuf[MAXBUFLEN];
     BYTE _dataBuf[MAXBUFLEN];
     int _nMsgLen;
@@ -538,6 +567,11 @@ namespace DrRobot_MotionSensorDriver
     void commWorkingThread();
     void DealWithPacket(const unsigned char *lpComData, const int nLen);
     void handleComData(const unsigned char *data, const int nLen);
+
+/*void calculateMovementDelta(drrobot_X80_player::MotorInfo& mtr, int& encoderPrevious, double& movementDelta, double& joint_angle);
+            double encoder2rad(int enc_value);*/
+void addRangeToCloud(const sensor_msgs::Range& range, sensor_msgs::PointCloud& pointCloud);
+
     bool _stopComm;
     CommState _eCommState;
     void debugCommMessage(std::string msg);
