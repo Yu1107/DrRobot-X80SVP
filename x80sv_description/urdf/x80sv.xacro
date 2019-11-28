@@ -1,7 +1,12 @@
 <?xml version='1.0' ?>
 
 <robot name="x80sv" xmlns:xacro="http://www.ros.org/wiki/xacro">
-	
+	 <material name="Black">
+           <color rgba="0 0 0 1"/>
+         </material>
+	 <material name="gray">
+           <color rgba="0.8 0.8 0.8 1"/>
+         </material>
 	<xacro:include filename="$(find x80sv_description)/urdf/wheel.xacro" />
 
  <!--
@@ -16,7 +21,7 @@
    Izz = 6.25e-5
 -->
 <xacro:property name="wheel_base" value="0.2" />
-<xacro:property name="wheel_diameter" value="0.16" />
+<xacro:property name="wheel_diameter" value="0.18" />
 <xacro:property name="wheel_distance" value="0.305"/>
 <xacro:property name="axis_height" value="0.05" />
 <xacro:property name="wheel_mass" value="0.05" />
@@ -41,7 +46,7 @@
 			<geometry>
 				<box size="0.001 0.001 0.001" />
 			</geometry>
-			<material name="Green" />
+			<material name="gray" />
 		</visual>
 
 		<collision>
@@ -113,6 +118,7 @@
 			<geometry>
 				<mesh filename="package://x80sv_description/meshes/collada/erratic_caster_support_link.dae"/>
 			</geometry>
+     			<material name="gray"/>
 		</visual>
 
 		<collision>
@@ -154,7 +160,7 @@
 				<geometry>
 					<mesh filename="package://x80sv_description/meshes/collada/erratic_caster_wheel_link.dae"/>
 				</geometry>
-				<material name="Black"/>
+				<material name="gray"/>
 			</visual>
 
 			<collision>
@@ -181,106 +187,96 @@
 		<origin xyz="0.0 -0.15525 -0.129" rpy="0 0 0" />
 	</wheel>
 
- <link name="kinect_link">
-  <collision>
-   <origin xyz="0 0 0" rpy="0 0 0"/>
-   <geometry><cylinder radius="0.07" length="0.01" /></geometry>
-  </collision>
+<!--kinect link-->
+<joint type="fixed" name="kinect_link_glue">
+   <origin xyz="-0.155 0 0.312" rpy="0 0 0"/>   <!--setup 0 0 ${-0.5*M_PI}-->${-0.0557*M_PI}
+   <child link="kinect_link"/>
+   <parent link="base_link" />
+</joint>
+<link name="kinect_link">
   <visual>
-   <origin xyz="0 0 0" rpy="0 0 0"/>
-   <geometry><cylinder radius="0.07" length="0.01" /></geometry>
+    <geometry>
+      <box size="0.072 0.278 0.073" />
+    </geometry>
+    <material name="Black" />
   </visual>
   <inertial>
-   <mass value="0.1" />
-   <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001" />
+      <mass value="0.001" />
+      <origin xyz="0 0 0" />
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0"
+               iyy="0.001" iyz="0.0" 
+               izz="0.001" />
   </inertial>
- </link>
+</link>
 
-    <!-- Laser is positioned 13 cm +/- 1 cm forward of the robot wheel axis and 19 cm above ground level.
-        The X axis of the laser points to the left. X of the robot itself is forwards.
+<!--kinect depth link-->
+<joint name="kinect_depth_joint" type="fixed">
+  <origin xyz="0 0.028 0" rpy="0 0 0" />
+  <parent link="kinect_link" />
+  <child link="kinect_depth_frame" />
+</joint>
 
-        The gmapping node expects scan data centered around x axis of scan. Scans are recorded from 0
-        to 360 degrees from -pi to pi. The modeled axis of the scanner points right. This is also used
-        as frame. The actual x-axis of the scanner points right. This is where the scan starts.
-        With x-axis pointing left, the data is centered around the x-axis!
+<link name="kinect_depth_frame">
+  <inertial>
+      <mass value="0.01" />
+      <origin xyz="0 0 0" />
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0"
+               iyy="0.001" iyz="0.0" 
+               izz="0.001" />
+  </inertial>
+</link>
 
-        Works for both real and simulated robot.
-    -->
-  <joint type="fixed" name="kinect_link_glue">
-   <origin xyz="-0.155 0 0.312" rpy="0 0 0"/>   <!--setup 0 0 ${-0.5*M_PI}-->${-0.0557*M_PI}
-  <child link="kinect_link"/>
-  <parent link="base_link" />
+<joint name="depth_optical_joint" type="fixed">
+  <origin xyz="0 0 0" rpy="${-M_PI/2} 0 ${-M_PI/2}" />
+  <parent link="kinect_depth_frame" />
+  <child link="kinect_depth_optical_frame" />
+</joint>
+
+<link name="kinect_depth_optical_frame">
+  <inertial>
+      <mass value="0.001" />
+      <origin xyz="0 0 0" />
+      <inertia ixx="0.0001" ixy="0.0" ixz="0.0"
+               iyy="0.0001" iyz="0.0" 
+               izz="0.0001" />
+  </inertial>
+</link>
+
+<!--kinect rgb link-->
+  <joint name="kinect_rgb_joint" type="fixed">
+    <origin xyz="0 -0.028 0" rpy="0 0 0" />
+    <parent link="kinect_link" />
+    <child link="kinect_rgb_frame" />
   </joint>
 
+  <link name="kinect_rgb_frame">
+    <inertial>
+      <mass value="0.001" />
+      <origin xyz="0 0 0" />
+      <inertia ixx="0.0001" ixy="0.0" ixz="0.0"
+        iyy="0.0001" iyz="0.0"
+        izz="0.0001" />
+    </inertial>
+  </link>
+
+  <joint name="kinect_rgb_optical_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="${-M_PI/2} 0 ${-M_PI/2}" />
+    <parent link="kinect_rgb_frame" />
+    <child link="kinect_rgb_optical_frame" />
+  </joint>
+
+  <link name="kinect_rgb_optical_frame">
+    <inertial>
+      <mass value="0.001" />
+      <origin xyz="0 0 0" />
+      <inertia ixx="0.0001" ixy="0.0" ixz="0.0"
+        iyy="0.0001" iyz="0.0"
+        izz="0.0001" />
+    </inertial>
+  </link>
 
 
 
-
-<!-- plugins -->
-<!-- hokuyo -->
-   <gazebo reference="kinect_link">
-    <sensor type="ray" name="kinect_link_sensor">
-      <pose>0 0 0 0 0 0</pose>
-	  <visualize>true</visualize>
-      <update_rate>10</update_rate>
-      <ray>
-        <scan>
-          <horizontal>
-            <samples>360</samples>
-            <resolution>1</resolution>
-
-            <!-- does not work: -->
-            <!--
-            <min_angle>0</min_angle>
-            <max_angle>${2*M_PI}</max_angle>
-            -->
-
-            <!-- works: -->
-            <min_angle>${-M_PI}</min_angle>
-            <max_angle>${M_PI}</max_angle>
-
-          </horizontal>
-        </scan>
-        <range>
-          <min>0.40</min>
-          <max>5.0</max>
-          <resolution>0.01</resolution>
-        </range>
-        <noise>
-          <type>gaussian</type>
-          <mean>0.0</mean>
-          <stddev>0.01</stddev>
-        </noise>
-      </ray>
-      <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
-        <topicName>/laser/scan</topicName>
-        <frameName>kinect_link</frameName>
-      </plugin>
-    </sensor>
-   </gazebo>
-   
-<gazebo>
-	<plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
-		<alwaysOn>true</alwaysOn>
-		<updateRate>100</updateRate>
-		<leftJoint>base_link_right_wheel_joint</leftJoint>
-		<rightJoint>base_link_left_wheel_joint</rightJoint>
-		<wheelSeparation>${wheel_distance}</wheelSeparation>
-		<wheelDiameter>${wheel_diameter}</wheelDiameter>
-		<wheelTorque>1</wheelTorque>
-		<wheelAcceleration>1</wheelAcceleration>
-		<commandTopic>cmd_vel</commandTopic>
-		<odometryTopic>odom</odometryTopic>
-		<odometryFrame>odom</odometryFrame>
-		<robotBaseFrame>base_footprint</robotBaseFrame>
-		<publishWheelTF>false</publishWheelTF>
-		<publishTf>1</publishTf>
-		<rosDebugLevel>na</rosDebugLevel>
-		<odometrySource>odom</odometrySource>
-		<publishWheelJointState>true</publishWheelJointState>
-	</plugin>
-
-</gazebo>
 
 </robot>
 
