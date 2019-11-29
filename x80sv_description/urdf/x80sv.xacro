@@ -1,6 +1,8 @@
 <?xml version='1.0' ?>
 
 <robot name="x80sv" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <property name="M_PI" value="3.14159" />
 	 <material name="black">
            <color rgba="0 0 0 1"/>
          </material>
@@ -10,7 +12,8 @@
 	 <material name="red">
            <color rgba="1 0 0 1"/>
          </material>
-	<xacro:include filename="$(find x80sv_description)/urdf/wheel.xacro" />
+
+<xacro:include filename="$(find x80sv_description)/urdf/wheel.xacro" />
 
  <!--
   Wheel inertia:
@@ -190,94 +193,6 @@
 		<origin xyz="0.0 -0.15525 -0.129" rpy="0 0 0" />
 	</wheel>
 
-<!--kinect link-->
-<joint type="fixed" name="kinect_link_glue">
-   <origin xyz="-0.155 0 0.352" rpy="0 0 0"/>   <!--setup 0 0 ${-0.5*M_PI}-->${-0.0557*M_PI}
-   <child link="kinect_link"/>
-   <parent link="base_link" />
-</joint>
-<link name="kinect_link">
-  <visual>
-    <geometry>
-      <box size="0.066 0.249 0.067" />
-    </geometry>
-    <material name="black" />
-  </visual>
-  <inertial>
-      <mass value="0.001" />
-      <origin xyz="0 0 0" />
-      <inertia ixx="0.001" ixy="0.0" ixz="0.0"
-               iyy="0.001" iyz="0.0" 
-               izz="0.001" />
-  </inertial>
-</link>
-
-<!--kinect depth link-->
-<joint name="kinect_depth_joint" type="fixed">
-  <origin xyz="0 0.028 0" rpy="0 0 0" />
-  <parent link="kinect_link" />
-  <child link="kinect_depth_frame" />
-</joint>
-
-<link name="kinect_depth_frame">
-  <inertial>
-      <mass value="0.01" />
-      <origin xyz="0 0 0" />
-      <inertia ixx="0.001" ixy="0.0" ixz="0.0"
-               iyy="0.001" iyz="0.0" 
-               izz="0.001" />
-  </inertial>
-</link>
-
-<joint name="depth_optical_joint" type="fixed">
-  <origin xyz="0 0 0" rpy="${-M_PI/2} 0 ${-M_PI/2}" />
-  <parent link="kinect_depth_frame" />
-  <child link="kinect_depth_optical_frame" />
-</joint>
-
-<link name="kinect_depth_optical_frame">
-  <inertial>
-      <mass value="0.001" />
-      <origin xyz="0 0 0" />
-      <inertia ixx="0.0001" ixy="0.0" ixz="0.0"
-               iyy="0.0001" iyz="0.0" 
-               izz="0.0001" />
-  </inertial>
-</link>
-
-<!--kinect rgb link-->
-  <joint name="kinect_rgb_joint" type="fixed">
-    <origin xyz="0 -0.028 0" rpy="0 0 0" />
-    <parent link="kinect_link" />
-    <child link="kinect_rgb_frame" />
-  </joint>
-
-  <link name="kinect_rgb_frame">
-    <inertial>
-      <mass value="0.001" />
-      <origin xyz="0 0 0" />
-      <inertia ixx="0.0001" ixy="0.0" ixz="0.0"
-        iyy="0.0001" iyz="0.0"
-        izz="0.0001" />
-    </inertial>
-  </link>
-
-  <joint name="kinect_rgb_optical_joint" type="fixed">
-    <origin xyz="0 0 0" rpy="${-M_PI/2} 0 ${-M_PI/2}" />
-    <parent link="kinect_rgb_frame" />
-    <child link="kinect_rgb_optical_frame" />
-  </joint>
-
-  <link name="kinect_rgb_optical_frame">
-    <inertial>
-      <mass value="0.001" />
-      <origin xyz="0 0 0" />
-      <inertia ixx="0.0001" ixy="0.0" ixz="0.0"
-        iyy="0.0001" iyz="0.0"
-        izz="0.0001" />
-    </inertial>
-  </link>
-
 <!--Aluminum extrusion-->
 <joint type="fixed" name="box_glue1">
    <origin xyz="-0.155 0 0.173" rpy="0 0 0"/>   
@@ -300,6 +215,68 @@
   </inertial>
 </link>
 
+<!--kinect link-->
+
+<joint type="fixed" name="kinect_link_glue">
+   <origin xyz="-0.155 0 0.3195" rpy="0 0 0"/>   
+   <child link="kinect_link"/>
+   <parent link="base_link" />
+</joint>
+
+ 	<link name="kinect_link">
+            <inertial>
+                <origin xyz="0.066 0.249 0.067" rpy="0 0 0" /><!--setup 0 0 ${-0.5*M_PI}-->
+                <mass value="0.82085" />
+                <inertia ixx="0.0039702" ixy="0" ixz="0" iyy="0.00059235" iyz="0" izz="0.0041195" />
+            </inertial>
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0" />
+                <geometry>
+                    <mesh filename="package://x80sv_description/meshes/kinect2.STL" />
+                </geometry>
+                <material name="">
+                    <color rgba="0.1 0.1 0.1 1" />
+                </material>    	
+            </visual>
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0" />
+                <geometry>
+                    <mesh filename="package://x80sv_description/meshes/kinect2.STL" />
+                </geometry>
+            </collision>
+        </link>
+
+        <!-- kinect2 rgb sensor physical attachment -->
+        <joint name="kinect2_rgb_joint" type="fixed">
+            <origin xyz="0.032 -0.095 0.042015" rpy="0 0 0" />
+            <parent link="kinect_link" />
+            <child link="kinect2_rgb_link" />
+        </joint>
+        <link name="kinect2_rgb_link" />
+        <!-- kinect2 rgb sensor frame -->
+        <joint name="kinect2_rgb_optical_frame_joint" type="fixed">
+            <origin xyz="0 0 0" rpy="${-M_PI / 2.0} 0 ${-M_PI / 2.0}" />
+            <parent link="kinect2_rgb_link" />
+            <child link="kinect2_rgb_optical_frame" />
+        </joint>
+        <link name="kinect2_rgb_optical_frame" />
+        <!-- gazebo extensions -->
+        <xacro:kinect2_rgb_gazebo link_name="kinect2_rgb_link" frame_name="kinect2_rgb_optical_frame" camera_name="kinect_V2" />    
+
+        <!-- kinect2 ir sensor physical attachment -->
+        <joint name="kinect2_ir_joint" type="fixed">
+            <origin xyz="0 0.05157 0" rpy="0 0 0" />
+            <parent link="kinect2_rgb_link" />
+            <child link="kinect2_ir_link" />
+        </joint>
+        <link name="kinect2_ir_link" />
+        <!-- kinect2 ir sensor frame -->
+        <joint name="kinect2_ir_optical_frame_joint" type="fixed">
+            <origin xyz="0 0 0" rpy="${-M_PI / 2.0} 0 ${-M_PI / 2.0}" />
+            <parent link="kinect2_ir_link" />
+            <child link="kinect2_ir_optical_frame" />
+        </joint>
+        <link name="kinect2_ir_optical_frame" />
 
 </robot>
 
