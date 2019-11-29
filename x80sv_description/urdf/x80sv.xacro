@@ -1,11 +1,14 @@
 <?xml version='1.0' ?>
 
 <robot name="x80sv" xmlns:xacro="http://www.ros.org/wiki/xacro">
-	 <material name="Black">
+	 <material name="black">
            <color rgba="0 0 0 1"/>
          </material>
 	 <material name="gray">
            <color rgba="0.8 0.8 0.8 1"/>
+         </material>
+	 <material name="red">
+           <color rgba="1 0 0 1"/>
          </material>
 	<xacro:include filename="$(find x80sv_description)/urdf/wheel.xacro" />
 
@@ -189,16 +192,16 @@
 
 <!--kinect link-->
 <joint type="fixed" name="kinect_link_glue">
-   <origin xyz="-0.155 0 0.312" rpy="0 0 0"/>   <!--setup 0 0 ${-0.5*M_PI}-->${-0.0557*M_PI}
+   <origin xyz="-0.155 0 0.352" rpy="0 0 0"/>   <!--setup 0 0 ${-0.5*M_PI}-->${-0.0557*M_PI}
    <child link="kinect_link"/>
    <parent link="base_link" />
 </joint>
 <link name="kinect_link">
   <visual>
     <geometry>
-      <box size="0.072 0.278 0.073" />
+      <box size="0.066 0.249 0.067" />
     </geometry>
-    <material name="Black" />
+    <material name="black" />
   </visual>
   <inertial>
       <mass value="0.001" />
@@ -275,7 +278,27 @@
     </inertial>
   </link>
 
-
+<!--Aluminum extrusion-->
+<joint type="fixed" name="box_glue1">
+   <origin xyz="-0.155 0 0.173" rpy="0 0 0"/>   
+   <child link="box_link_1"/>
+   <parent link="base_link" />
+</joint>
+<link name="box_link_1">
+  <visual>
+    <geometry>
+      <box size="0.02 0.319 0.291" />
+    </geometry>
+    <material name="gray" />
+  </visual>
+  <inertial>
+      <mass value="0.001" />
+      <origin xyz="0 0 0" />
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0"
+               iyy="0.001" iyz="0.0" 
+               izz="0.001" />
+  </inertial>
+</link>
 
 
 </robot>
