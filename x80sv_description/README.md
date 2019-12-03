@@ -1,6 +1,8 @@
 x80sv_description
 =================
 
-Robot description file for the x80sv robot
+model description file for the 
 
-add kinect position 
+1. x80sv robot
+
+2. kinect v2  
