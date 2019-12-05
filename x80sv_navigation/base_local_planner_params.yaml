@@ -55,6 +55,9 @@ DWAPlannerROS:
   latch_xy_goal_tolerance: false 
 
   # Forward simulation parameters:
+  # 將sim_time參數設置為不同的值會對機器人的行為產生很大影響。我通常將此參數設置為1-2秒之間，
+  # 將其設置為較高可以使軌跡稍微平滑一些，請確保最小速度乘以sim_period小於我對目標的承受能力的兩倍。
+  # 否則，機器人將更喜歡在其目標位置範圍之外的位置旋轉，而不是朝目標移動。
   sim_time: 3  # default 1.7
   vx_samples: 15 # default 3
   vy_samples: 1  # default 10
