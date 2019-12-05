@@ -1,6 +1,6 @@
 <launch>
 
-  <!-- start x80sv robot-->
+  <!-- start x80sv robot + joystick-->
   <include file="$(find drrobot_X80_player)/launch/robot.launch"/> 
   <include file="$(find drrobot_X80_player)/launch/teleop_joy.launch"/>
 
@@ -40,7 +40,7 @@
     </rosparam> 
   </node>
 
-  <!-- navigation -->
+  <!-- point 2 point -->
   include file="$(find x80sv_navigation)/launch/fake_move_base_blank_map.launch"/> 
   <node pkg="drrobot_X80_player" name="PDR_to_Goal" type="move_base_topoint.py" output="log">
    <rosparam>
