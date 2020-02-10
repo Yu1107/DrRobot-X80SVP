@@ -1,52 +1,45 @@
-<?xml version='1.0' ?>
-
+<?xml version="1.0"?>
 <robot name="x80sv" xmlns:xacro="http://www.ros.org/wiki/xacro">
-
-    <property name="M_PI" value="3.14159" />
-	 <material name="black">
-           <color rgba="0 0 0 1"/>
-         </material>
-	 <material name="gray">
-           <color rgba="0.8 0.8 0.8 1"/>
-         </material>
-	 <material name="red">
-           <color rgba="1 0 0 1"/>
-         </material>
-
-<xacro:include filename="$(find x80sv_description)/urdf/wheel.xacro" />
-
- <!--
-  Wheel inertia:
-   Assuming solid cylinder:
-   Izz = (1/2)*m*r^2
-   Ixx = Iyy = (1/12)*m*(3*r^2 + h^2)
-   Using m = 0.05 [kg] (wheel weight 50 gr.)
-   r = 0.05 [m] (wheel radius)
-   h = 0.01 [m] (wheel width)
-   Ixx = Iyy = 3.17e-5
-   Izz = 6.25e-5
--->
-<xacro:property name="wheel_base" value="0.2" />
-<xacro:property name="wheel_diameter" value="0.18" />
-<xacro:property name="wheel_distance" value="0.305"/>
-<xacro:property name="axis_height" value="0.05" />
-<xacro:property name="wheel_mass" value="0.05" />
-<xacro:property name="wheel_Ixx" value="0.0000317" />
-<xacro:property name="wheel_Izz" value="0.0000625" />
-<xacro:property name="M_PI" value="3.141592653589793238462643383279502884197169399375105820974944592307816406" />
-
-
- 	<link name="base_footprint">
-        <!--
+	<property name="M_PI" value="3.14159" />
+	<material name="black">
+		<color rgba="0 0 0 1" />
+	</material>
+	<material name="gray">
+		<color rgba="0.8 0.8 0.8 1" />
+	</material>
+	<material name="red">
+		<color rgba="1 0 0 1" />
+	</material>
+	<include filename="$(find x80sv_description)/urdf/wheel.xacro" />
+	<!--
+	Wheel inertia:
+	Assuming solid cylinder:
+	Izz = (1/2)*m*r^2
+	Ixx = Iyy = (1/12)*m*(3*r^2 + h^2)
+	Using m = 0.05 [kg] (wheel weight 50 gr.)
+	r = 0.05 [m] (wheel radius)
+	h = 0.01 [m] (wheel width)
+	Ixx = Iyy = 3.17e-5
+	Izz = 6.25e-5
+	-->
+	<property name="wheel_base" value="0.2" />
+	<property name="wheel_diameter" value="0.18" />
+	<property name="wheel_distance" value="0.305" />
+	<property name="axis_height" value="0.05" />
+	<property name="wheel_mass" value="0.05" />
+	<property name="wheel_Ixx" value="0.0000317" />
+	<property name="wheel_Izz" value="0.0000625" />
+	<property name="M_PI" value="3.141592653589793238462643383279502884197169399375105820974944592307816406" />
+	<link name="base_footprint">
+		<!--
 		<inertial>
-			<mass value="0.0001" />
-			<origin xyz="0 0 0" />
-			<inertia ixx="0.0001" ixy="0.0" ixz="0.0"
-				iyy="0.0001" iyz="0.0" 
-				izz="0.0001" />
+		<mass value="0.0001" />
+		<origin xyz="0 0 0" />
+		<inertia ixx="0.0001" ixy="0.0" ixz="0.0"
+		iyy="0.0001" iyz="0.0"
+		izz="0.0001" />
 		</inertial>
-        -->
-
+		-->
 		<visual>
 			<origin xyz="0 0 0" rpy="0 0 0" />
 			<geometry>
@@ -54,7 +47,6 @@
 			</geometry>
 			<material name="gray" />
 		</visual>
-
 		<collision>
 			<origin xyz="0 0 0.128" rpy="0 0 0" />
 			<geometry>
@@ -62,23 +54,20 @@
 			</geometry>
 		</collision>
 	</link>
-
 	<joint name="base_footprint_joint" type="fixed">
 		<origin xyz="0 0 0.128" rpy="0 0 0" />
-		<parent link="base_footprint"/>
+		<parent link="base_footprint" />
 		<child link="base_link" />
 	</joint>
-
-
 	<link name="base_link">
 		<collision>
-			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<origin xyz="0 0 0" rpy="0 0 0" />
 			<geometry>
 				<box size="0.4 0.2 0.01" />
 			</geometry>
 		</collision>
 		<visual>
-			<origin xyz="0 0 -0.20" rpy="0 0 0"/>
+			<origin xyz="0 0 -0.20" rpy="0 0 0" />
 			<geometry>
 				<mesh filename="package://x80sv_description/meshes/x80sv.stl" />
 			</geometry>
@@ -86,197 +75,169 @@
 		<inertial>
 			<mass value="2.0" />
 			<origin xyz="-0.1 0 0" />
-			<inertia ixx="1.0" ixy="0.0" ixz="0.0"
-				iyy="1.0" iyz="0.0" 
-				izz="1.0" />
+			<inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
 		</inertial>
 	</link>
-
-
 	<joint name="base_caster_support_joint" type="continuous">
 		<origin xyz="-0.188 0 -0.043" rpy="0 0 0" />
 		<parent link="base_link" />
-		<child link="base_caster_support_link"/>
-
+		<child link="base_caster_support_link" />
 		<axis xyz="0 0 1" />
 		<anchor xyz="0.01 0 0" />
 		<limit effort="100" velocity="100" k_velocity="0" />
 		<joint_properties damping="0.0" friction="0.0" />
 	</joint>
-
 	<transmission type="pr2_mechanism_model/SimpleTransmission" name="base_caster_support_trans">
 		<actuator name="base_caster_support_motor" />
 		<joint name="base_caster_support_joint" />
-		<mechanicalReduction>1.0</mechanicalReduction>
+		<mechanicalReduction>
+			1.0
+		</mechanicalReduction>
 	</transmission>
-
 	<link name="base_caster_support_link">
 		<inertial>
-			<mass value="0.1"/>
+			<mass value="0.1" />
 			<origin xyz="0 0 0" />
-			<inertia ixx="0.01" ixy="0.0" ixz="0.0"
-				iyy="0.01" iyz="0.0"
-				izz="0.01" />
+			<inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01" />
 		</inertial>
-
 		<visual>
 			<origin xyz="0 0 -0.08" rpy="0 0 0" />
 			<geometry>
-				<mesh filename="package://x80sv_description/meshes/collada/erratic_caster_support_link.dae"/>
+				<mesh filename="package://x80sv_description/meshes/collada/erratic_caster_support_link.dae" />
 			</geometry>
-     			<material name="gray"/>
+			<material name="gray" />
 		</visual>
-
 		<collision>
 			<origin xyz="0 0 0" rpy="0 0 0" />
 			<geometry>
-				<mesh filename="package://x80sv_description/meshes/collada/erratic_caster_support_link.dae"/>
+				<mesh filename="package://x80sv_description/meshes/collada/erratic_caster_support_link.dae" />
 			</geometry>
 		</collision>
-	</link>	
-
+	</link>
 	<joint name="caster_wheel_joint" type="continuous">
 		<origin xyz="-0.025 0 -0.1229" rpy="0 0 0" />
 		<parent link="base_caster_support_link" />
 		<child link="caster_wheel_link" />
-
 		<axis xyz="0 1 0" />
 		<anchor xyz="0 0 0" />
 		<limit effort="100" velocity="100" k_velocity="0" />
 		<joint_properties damping="0.0" friction="0.0" />
 	</joint>
-
 	<transmission type="pr2_mechanism_model/SimpleTransmission" name="caster_wheel_trans">
 		<actuator name="caster_wheel_motor" />
 		<joint name="caster_wheel_joint" />
-		<mechanicalReduction>1.0</mechanicalReduction>
+		<mechanicalReduction>
+			1.0
+		</mechanicalReduction>
 	</transmission>
-
 	<link name="caster_wheel_link">
 		<inertial>
-			<mass value="0.1" /> 
+			<mass value="0.1" />
 			<origin xyz="0 0 0" rpy="0 0 0" />
-			<inertia  ixx="0.012411765597" ixy="-0.000711733678" ixz="0.00050272983"
-				iyy="0.015218160428" iyz="-0.000004273467"
-				izz="0.011763977943" />
-			</inertial>
-
-			<visual>
-				<origin xyz="0 0 0" rpy="0 0 0" />
-				<geometry>
-					<mesh filename="package://x80sv_description/meshes/collada/erratic_caster_wheel_link.dae"/>
-				</geometry>
-				<material name="gray"/>
-			</visual>
-
-			<collision>
-				<origin xyz="0 0 0" rpy="0 0 0" />
-				<geometry>
-					<mesh filename="package://x80sv_description/meshes/collada/erratic_caster_wheel_link.dae"/>
-				</geometry>
-			</collision>
-		</link>
-
+			<inertia ixx="0.012411765597" ixy="-0.000711733678" ixz="0.00050272983" iyy="0.015218160428" iyz="-0.000004273467" izz="0.011763977943" />
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://x80sv_description/meshes/collada/erratic_caster_wheel_link.dae" />
+			</geometry>
+			<material name="gray" />
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://x80sv_description/meshes/collada/erratic_caster_wheel_link.dae" />
+			</geometry>
+		</collision>
+	</link>
 	<gazebo reference="caster_wheel_link">
 		<mu1 value="100.0" />
 		<mu2 value="100.0" />
-		<kp  value="1000000.0" />
-		<kd  value="1.0" />
+		<kp value="1000000.0" />
+		<kd value="1.0" />
 	</gazebo>
-
-
 	<wheel suffix="left" parent="base_link">
 		<origin xyz="0.0 0.15525 -0.129" rpy="0 0 0" />
 	</wheel>
-
 	<wheel suffix="right" parent="base_link">
 		<origin xyz="0.0 -0.15525 -0.129" rpy="0 0 0" />
 	</wheel>
-
-<!--Aluminum extrusion-->
-<joint type="fixed" name="box_glue1">
-   <origin xyz="-0.155 0 0.173" rpy="0 0 0"/>   
-   <child link="box_link_1"/>
-   <parent link="base_link" />
-</joint>
-<link name="box_link_1">
-  <visual>
-    <geometry>
-      <box size="0.02 0.319 0.291" />
-    </geometry>
-    <material name="gray" />
-  </visual>
-  <inertial>
-      <mass value="0.001" />
-      <origin xyz="0 0 0" />
-      <inertia ixx="0.001" ixy="0.0" ixz="0.0"
-               iyy="0.001" iyz="0.0" 
-               izz="0.001" />
-  </inertial>
-</link>
-
-<!--kinect link-->
-
-<joint type="fixed" name="kinect_link_glue">
-   <origin xyz="-0.155 0 0.3195" rpy="0 0 0"/>   
-   <child link="kinect_link"/>
-   <parent link="base_link" />
-</joint>
-
- 	<link name="kinect_link">
-            <inertial>
-                <origin xyz="0.066 0.249 0.067" rpy="0 0 0" /><!--setup 0 0 ${-0.5*M_PI}-->
-                <mass value="0.82085" />
-                <inertia ixx="0.0039702" ixy="0" ixz="0" iyy="0.00059235" iyz="0" izz="0.0041195" />
-            </inertial>
-            <visual>
-                <origin xyz="0 0 0" rpy="0 0 0" />
-                <geometry>
-                    <mesh filename="package://x80sv_description/meshes/kinect2.STL" />
-                </geometry>
-                <material name="">
-                    <color rgba="0.1 0.1 0.1 1" />
-                </material>    	
-            </visual>
-            <collision>
-                <origin xyz="0 0 0" rpy="0 0 0" />
-                <geometry>
-                    <mesh filename="package://x80sv_description/meshes/kinect2.STL" />
-                </geometry>
-            </collision>
-        </link>
-
-        <!-- kinect2 rgb sensor physical attachment -->
-        <joint name="kinect2_rgb_joint" type="fixed">
-            <origin xyz="0.032 -0.095 0.042015" rpy="0 0 0" />
-            <parent link="kinect_link" />
-            <child link="kinect2_rgb_link" />
-        </joint>
-        <link name="kinect2_rgb_link" />
-        <!-- kinect2 rgb sensor frame -->
-        <joint name="kinect2_rgb_optical_frame_joint" type="fixed">
-            <origin xyz="0 0 0" rpy="${-M_PI / 2.0} 0 ${-M_PI / 2.0}" />
-            <parent link="kinect2_rgb_link" />
-            <child link="kinect2_rgb_optical_frame" />
-        </joint>
-        <link name="kinect2_rgb_optical_frame" />
-        <!-- gazebo extensions -->
-        <xacro:kinect2_rgb_gazebo link_name="kinect2_rgb_link" frame_name="kinect2_rgb_optical_frame" camera_name="kinect_V2" />    
-
-        <!-- kinect2 ir sensor physical attachment -->
-        <joint name="kinect2_ir_joint" type="fixed">
-            <origin xyz="0 0.05157 0" rpy="0 0 0" />
-            <parent link="kinect2_rgb_link" />
-            <child link="kinect2_ir_link" />
-        </joint>
-        <link name="kinect2_ir_link" />
-        <!-- kinect2 ir sensor frame -->
-        <joint name="kinect2_ir_optical_frame_joint" type="fixed">
-            <origin xyz="0 0 0" rpy="${-M_PI / 2.0} 0 ${-M_PI / 2.0}" />
-            <parent link="kinect2_ir_link" />
-            <child link="kinect2_ir_optical_frame" />
-        </joint>
-        <link name="kinect2_ir_optical_frame" />
-
+	<!-- Aluminum extrusion -->
+	<joint type="fixed" name="box_glue1">
+		<origin xyz="-0.155 0 0.173" rpy="0 0 0" />
+		<child link="box_link_1" />
+		<parent link="base_link" />
+	</joint>
+	<link name="box_link_1">
+		<visual>
+			<geometry>
+				<box size="0.02 0.319 0.291" />
+			</geometry>
+			<material name="gray" />
+		</visual>
+		<inertial>
+			<mass value="0.001" />
+			<origin xyz="0 0 0" />
+			<inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001" />
+		</inertial>
+	</link>
+	<!-- kinect link -->
+	<joint type="fixed" name="kinect_link_glue">
+		<origin xyz="-0.155 0 0.3195" rpy="0 0 0" />
+		<child link="kinect_link" />
+		<parent link="base_link" />
+	</joint>
+	<link name="kinect_link">
+		<inertial>
+			<origin xyz="0.066 0.249 0.067" rpy="0 0 0" />
+			<!-- setup 0 0 ${-0.5*M_PI} -->
+			<mass value="0.82085" />
+			<inertia ixx="0.0039702" ixy="0" ixz="0" iyy="0.00059235" iyz="0" izz="0.0041195" />
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://x80sv_description/meshes/kinect2.STL" />
+			</geometry>
+			<material name="">
+				<color rgba="0.1 0.1 0.1 1" />
+			</material>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://x80sv_description/meshes/kinect2.STL" />
+			</geometry>
+		</collision>
+	</link>
+	<!-- kinect2 rgb sensor physical attachment -->
+	<joint name="kinect2_rgb_joint" type="fixed">
+		<origin xyz="0.032 -0.095 0.042015" rpy="0 0 0" />
+		<parent link="kinect_link" />
+		<child link="kinect2_rgb_link" />
+	</joint>
+	<link name="kinect2_rgb_link" />
+	<!-- kinect2 rgb sensor frame -->
+	<joint name="kinect2_rgb_optical_frame_joint" type="fixed">
+		<origin xyz="0 0 0" rpy="${-M_PI / 2.0} 0 ${-M_PI / 2.0}" />
+		<parent link="kinect2_rgb_link" />
+		<child link="kinect2_rgb_optical_frame" />
+	</joint>
+	<link name="kinect2_rgb_optical_frame" />
+	<!-- gazebo extensions -->
+	<kinect2_rgb_gazebo link_name="kinect2_rgb_link" frame_name="kinect2_rgb_optical_frame" camera_name="kinect_V2" />
+	<!-- kinect2 ir sensor physical attachment -->
+	<joint name="kinect2_ir_joint" type="fixed">
+		<origin xyz="0 0.05157 0" rpy="0 0 0" />
+		<parent link="kinect2_rgb_link" />
+		<child link="kinect2_ir_link" />
+	</joint>
+	<link name="kinect2_ir_link" />
+	<!-- kinect2 ir sensor frame -->
+	<joint name="kinect2_ir_optical_frame_joint" type="fixed">
+		<origin xyz="0 0 0" rpy="${-M_PI / 2.0} 0 ${-M_PI / 2.0}" />
+		<parent link="kinect2_ir_link" />
+		<child link="kinect2_ir_optical_frame" />
+	</joint>
+	<link name="kinect2_ir_optical_frame" />
 </robot>
-

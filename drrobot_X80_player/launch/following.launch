@@ -20,8 +20,8 @@
   </node>
 
   <!-- rviz... -->
-  <node name="kinect_view" pkg="rqt_image_view" type="rqt_image_view" />
-  node type="rviz" name="rviz" pkg="rviz" args="/home/lab5254/x80sv_config.rviz" />
+  node name="kinect_view" pkg="rqt_image_view" type="rqt_image_view" />
+  <node type="rviz" name="rviz" pkg="rviz" args="/home/lab5254/x80sv_config.rviz" />
 
   <!-- start IMU + complementary_filter-->
   <include file="$(find imu_complementary_filter)/launch/complementary_filter.launch"/>
