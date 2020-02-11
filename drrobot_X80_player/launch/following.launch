@@ -27,6 +27,7 @@
   <include file="$(find imu_complementary_filter)/launch/complementary_filter.launch"/>
   include file="$(find imu_filter_madgwick)/launch/filter_madgwick.launch"/>
   <node pkg="drrobot_X80_player" name="calibration" type="calibration" output="log"/>
+  <node pkg="drrobot_X80_player" name="realtime_findpeak" type="findpeak.py" output="log"/>
 
   <!-- start kinect skeleton + tracker-->
   include file="$(find kinect2_tracker)/launch/tracker.launch"/> 
