@@ -162,6 +162,8 @@
 	<wheel suffix="right" parent="base_link">
 		<origin xyz="0.0 -0.15525 -0.129" rpy="0 0 0" />
 	</wheel>
+
+<!-- new add -->
 	<!-- Aluminum extrusion -->
 	<joint type="fixed" name="box_glue1">
 		<origin xyz="-0.155 0 0.173" rpy="0 0 0" />
@@ -181,6 +183,7 @@
 			<inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001" />
 		</inertial>
 	</link>
+
 	<!-- kinect link -->
 	<joint type="fixed" name="kinect_link_glue">
 		<origin xyz="-0.155 0 0.3195" rpy="0 0 0" />
@@ -189,8 +192,8 @@
 	</joint>
 	<link name="kinect_link">
 		<inertial>
-			<origin xyz="0.066 0.249 0.067" rpy="0 0 0" />
-			<!-- setup 0 0 ${-0.5*M_PI} -->
+			<origin xyz="0.066 0.249 0.067" rpy="0 0 ${-0.5*M_PI}" /> <!-- setup 0 0 ${-0.5*M_PI} -->
+			
 			<mass value="0.82085" />
 			<inertia ixx="0.0039702" ixy="0" ixz="0" iyy="0.00059235" iyz="0" izz="0.0041195" />
 		</inertial>
@@ -240,4 +243,78 @@
 		<child link="kinect2_ir_optical_frame" />
 	</joint>
 	<link name="kinect2_ir_optical_frame" />
+
+<!-- new add -->
+
+
+<!-- gazebo plugins -->
+<gazebo>
+	<plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+		<alwaysOn>true</alwaysOn>
+		<updateRate>100</updateRate>
+		<leftJoint>base_link_right_wheel_joint</leftJoint>
+		<rightJoint>base_link_left_wheel_joint</rightJoint>
+		<wheelSeparation>${wheel_distance}</wheelSeparation>
+		<wheelDiameter>${wheel_diameter}</wheelDiameter>
+		<wheelTorque>1</wheelTorque>
+		<wheelAcceleration>1</wheelAcceleration>
+		<commandTopic>cmd_vel</commandTopic>
+		<odometryTopic>odom</odometryTopic>
+		<odometryFrame>odom</odometryFrame>
+		<robotBaseFrame>base_footprint</robotBaseFrame>
+		<publishWheelTF>false</publishWheelTF>
+		<publishTf>1</publishTf>
+		<rosDebugLevel>na</rosDebugLevel>
+		<odometrySource>odom</odometrySource>
+		<publishWheelJointState>true</publishWheelJointState>
+	</plugin>
+
+</gazebo>
+
+
+<gazebo reference="kinect_link">
+    <sensor type="depth" name="camera1">
+        <always_on>1</always_on>
+        <visualize>true</visualize>             
+        <camera>
+            <horizontal_fov>1.047</horizontal_fov>  
+            <image>
+                <width>640</width>
+                <height>480</height>
+                <format>R8G8B8</format>
+            </image>
+            <depth_camera>
+
+            </depth_camera>
+            <clip>
+                <near>0.1</near>
+                <far>100</far>
+            </clip>
+        </camera>
+             <plugin name="camera_controller" filename="libgazebo_ros_openni_kinect.so">
+             <alwaysOn>true</alwaysOn>
+                <updateRate>10.0</updateRate>
+                <cameraName>kinect_rgb</cameraName>
+                <frameName>kinect_link</frameName>                   
+            <imageTopicName>kinect_rgb</imageTopicName>
+            <!--depthImageTopicName>depth/image_raw</depthImageTopicName>
+            <pointCloudTopicName>depth/points</pointCloudTopicName>
+            <cameraInfoTopicName>rgb/camera_info</cameraInfoTopicName>              
+            <depthImageCameraInfoTopicName>depth/camera_info</depthImageCameraInfoTopicName>            
+            <pointCloudCutoff>0.4</pointCloudCutoff>                
+                <hackBaseline>0.07</hackBaseline>
+                <distortionK1>0.0</distortionK1>
+                <distortionK2>0.0</distortionK2>
+                <distortionK3>0.0</distortionK3>
+                <distortionT1>0.0</distortionT1>
+                <distortionT2>0.0</distortionT2-->
+            <CxPrime>0.0</CxPrime>
+            <Cx>0.0</Cx>
+            <Cy>0.0</Cy>
+            <focalLength>0.0</focalLength>
+            </plugin>
+    </sensor>
+</gazebo>
+
+
 </robot>
