@@ -464,7 +464,7 @@ public:
     // Publish the message:
     m_odom_pub.publish(odom);
 
-    nav_msgs::Path path;
+    /*nav_msgs::Path path;
     path.header.stamp = nu;
     path.header.frame_id = "odom";
     geometry_msgs::PoseStamped this_pose_stamped;
@@ -482,7 +482,7 @@ public:
     this_pose_stamped.header.frame_id = "odom";
     path.poses.push_back(this_pose_stamped);
 
-    path_pub.publish(path);
+    path_pub.publish(path);*/
 
     ros::spinOnce(); // check for incoming messages
   }

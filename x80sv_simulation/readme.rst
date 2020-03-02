@@ -28,3 +28,13 @@ This can be done by referencting the local gazebo model path database, in this c
 	$ export GAZEBO_MODEL_PATH=~/catkin_ws/src/x80sv/x80sv_simulation/models/
 
 Models can be downloaded from the Gazebo model database bitbucket at https://bitbucket.org/osrf/gazebo_models
+
+
+ref
+--------------
+
+Computing the inertial parameters : http://gazebosim.org/tutorials?tut=inertia&cat=build_robot
+
+kinect v2 : http://blog.csdn.net/qq_23670601/article/details/89931098
+
+
