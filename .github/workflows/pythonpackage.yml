@@ -26,7 +26,7 @@ jobs:
     - name: Run Tests
       uses: ros-tooling/action-ros-ci@0.0.13
       with:
-        package-name: DrRobot-X80SVP
+        package-name: package-name
 
     - name: Upload Logs
       uses: actions/upload-artifact@v1
