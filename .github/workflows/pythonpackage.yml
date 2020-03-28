@@ -54,7 +54,7 @@ jobs:
           # echo "::warning $CI_SOURCE_PATH"
           # echo "::warning `ls -l`"
           cd ..
-          catkin make
+          catkin_make
           #catkin build
       - name: lint
         run: |
