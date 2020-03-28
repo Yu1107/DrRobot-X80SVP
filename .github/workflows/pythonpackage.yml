@@ -28,7 +28,7 @@ jobs:
         run: |
             sudo sh -c "echo \"deb http://packages.ros.org/ros/ubuntu $ROS_CI_DESKTOP main\" > /etc/apt/sources.list.d/ros-latest.list"
             sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
-            sudo apt-get install ros-$ROS_DISTRO-desktop-full
+            
             sudo apt-get update -qq
             sudo apt-get install dpkg
             sudo apt-get install -y python-catkin-tools python-catkin-pkg python-rosdep python-wstool ros-$ROS_DISTRO-cv-bridge ros-$ROS_DISTRO-image-transport ros-$ROS_DISTRO-roslint
@@ -48,6 +48,7 @@ jobs:
           cd ~/catkin_ws/src
           git clone --depth=50 https://github.com/ros-controls/ros_control.git ros-controls/ros_control
           git clone https://github.com/ros/common_msgs.git
+          git clone https://github.com/ros/urdf.git
           ln -s ~/work  # $CI_SOURCE_PATH
           # echo "::warning $CI_SOURCE_PATH"
           # echo "::warning `ls -l`"
