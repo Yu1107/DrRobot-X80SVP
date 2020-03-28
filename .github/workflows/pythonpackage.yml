@@ -15,7 +15,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: ubuntu-latest
+        os: [ubuntu-latest]
       fail-fast: false
     steps:
     - name: Setup ROS 2
