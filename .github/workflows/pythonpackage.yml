@@ -2,44 +2,37 @@
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
 
-name: 'Setup ROS environment'
-description: |
-    Install system dependencies required to build ROS and ROS 2 packages
-author: 'ROS Tooling Working Group'
-branding:
-  icon: 'box'
-  color: 'gray-dark'
-inputs:
-  required-ros-distributions:
-    description: |
-        List of binary ROS distributions to be installed.
-        Support for non-Linux platform is not implemented yet, so this
-        parameter is ignored on Mac OS X and Windows.
-        Allowed ROS distributions
-        - "" (no value) - no ROS binary installation
-        - kinetic
-        - melodic
-        - dashing
-        - eloquent
-        - source
-        Multiple values can be passed using a whitespace delimited list
-        "melodic dashing".
-        For each passed ROS distribution, its desktop variant will be installed.
-    required: false
-    default: ""
-runs:
-  using: 'node12'
-  main: 'dist/index.js'
-      - name: Lint with flake8
-        run: |
-          pip install flake8
-          # stop the build if there are Python syntax errors or undefined names
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-      - name: Test with pytest
-        run: |
+name: Test Example
 
-          pip install pytest
-          pip install pytest-cov
-          pytest findpeak.py
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
+    steps:
+    - name: Setup ROS 2
+      uses: ros-tooling/setup-ros@0.0.15
+      with:
+        required-ros-distributions: eloquent
+
+    - name: Run Tests
+      uses: ros-tooling/action-ros-ci@0.0.13
+      with:
+        package-name: example_package
+
+    - name: Upload Logs
+      uses: actions/upload-artifact@v1
+      with:
+        name: colcon-logs
+        path: ros_ws/log
+      if: always()
+
+
