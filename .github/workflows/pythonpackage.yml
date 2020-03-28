@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-18.04
     strategy:
       matrix:
-        python-version: [2.7, 3.5, 3.6, 3.7, 3.8]    
+        python-version: [2.7, 3.5, 3.6]    
     env:
       ROS_CI_DESKTOP: "`lsb_release -cs`"  # e.g. [trusty|xenial|...]
       CI_SOURCE_PATH: $(pwd)
@@ -49,6 +49,7 @@ jobs:
           git clone --depth=50 https://github.com/ros-controls/ros_control.git ros-controls/ros_control
           git clone https://github.com/ros/common_msgs.git
           git clone https://github.com/ros/urdf.git
+          git clone https://github.com/ros/urdfdom_headers.git
           ln -s ~/work  # $CI_SOURCE_PATH
           # echo "::warning $CI_SOURCE_PATH"
           # echo "::warning `ls -l`"
