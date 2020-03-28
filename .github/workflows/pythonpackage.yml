@@ -38,12 +38,14 @@ jobs:
             rosdep update --include-eol-distros  # Support EOL distros.
       - name: build
         run: |
+          
           source /opt/ros/$ROS_DISTRO/setup.bash
           mkdir -p ~/catkin_ws/src
           cd ~/catkin_ws
           catkin build
           source devel/setup.bash
           cd ~/catkin_ws/src
+          git clone --depth=50 https://github.com/ros-controls/ros_control.git ros-controls/ros_control
           ln -s ~/work  # $CI_SOURCE_PATH
           # echo "::warning $CI_SOURCE_PATH"
           # echo "::warning `ls -l`"
