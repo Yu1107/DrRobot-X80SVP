@@ -46,6 +46,7 @@ jobs:
           source devel/setup.bash
           cd ~/catkin_ws/src
           git clone --depth=50 https://github.com/ros-controls/ros_control.git ros-controls/ros_control
+          git clone https://github.com/ros/common_msgs.git
           ln -s ~/work  # $CI_SOURCE_PATH
           # echo "::warning $CI_SOURCE_PATH"
           # echo "::warning `ls -l`"
