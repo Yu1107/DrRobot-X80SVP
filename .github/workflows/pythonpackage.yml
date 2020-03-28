@@ -15,7 +15,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: ubuntu-latest
       fail-fast: false
     steps:
     - name: Setup ROS 2
@@ -26,7 +26,7 @@ jobs:
     - name: Run Tests
       uses: ros-tooling/action-ros-ci@0.0.13
       with:
-        package-name: example_package
+        package-name: DrRobot-X80SVP
 
     - name: Upload Logs
       uses: actions/upload-artifact@v1
