@@ -10,7 +10,7 @@ Add all the directories to your catkin_ws and run catkin_make
   - maker trajectory
 
   ```bash
-  $ roslaunch drrobot_X80_player robot.launch
+  roslaunch drrobot_X80_player robot.launch
   ```
 
 **starting following node:**
