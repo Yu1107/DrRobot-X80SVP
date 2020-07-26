@@ -30,13 +30,7 @@ from roslib import message
 from geometry_msgs.msg import Twist, Point
 from math import copysign
 
-#global error_d,error_w,I,D
-error_d = 0
-error_w = 0
-ki = 0.025
-kd = 0
-I = 0
-D = 0
+D, Dt = 0.0, 0.0
 
 
 class Follower():
@@ -59,10 +53,12 @@ class Follower():
         self.x_threshold = rospy.get_param("~x_threshold", 0.05)
 
         # How much do we weight the goal distance (z) when making a movement
-        self.z_scale = rospy.get_param("~z_scale", 2.5)
+        self.kp = rospy.get_param("~kp", 2.5)
+        self.kd = rospy.get_param("~kd", 0.0)
 
         # How much do we weight left/right displacement of the person when making a movement
-        self.x_scale = rospy.get_param("~x_scale", 2.0)
+        self.kpt = rospy.get_param("~kpt", 2.0)
+        self.kdt = rospy.get_param("~kdt", 0.0)
 
         # The maximum rotation speed in radians per second
         self.max_angular_speed = rospy.get_param("~max_angular_speed", 1.0)
@@ -97,40 +93,32 @@ class Follower():
 
     def set_cmd_vel(self, position):
         rospy.loginfo("z: [%5.2f], x: [%5.2f]", position.z, position.x)
-        global error_d, error_w, I, D, distanceToGoal
+        global D, Dt
         # Check our movement thresholds
-        if (abs(position.z - self.goal_z) > self.z_threshold):
+        if (abs(position.z - self.goal_z) > self.z_threshold) and position.z <= 4:
             # * 0.7 + error_d * 0.3
             distanceToGoal = (position.z - self.goal_z)
-            D = distanceToGoal - error_d
-            I += distanceToGoal
+            D = distanceToGoal - D
 
-            if (position.z <= 4):
-                # Compute the angular component of the movement
-                linear_speed = distanceToGoal * self.z_scale  # +  ki*I #+ kd*D
-                # Make sure we meet our min/max specifications
-                self.move_cmd.linear.x = copysign(max(self.min_linear_speed, min(
-                    self.max_linear_speed, abs(linear_speed))), linear_speed)
+            # Compute the angular component of the movement
+            linear_speed = distanceToGoal * self.kp + self.kd*D
+            # Make sure we meet our min/max specifications
+            self.move_cmd.linear.x = copysign(max(self.min_linear_speed, min(
+                self.max_linear_speed, abs(linear_speed))), linear_speed)
 
-            """else :
-		    # Compute the angular component of the movement
-		    linear_speed = distanceToGoal * 4 
-		    # Make sure we meet our min/max specifications
-		    self.move_cmd.linear.x = copysign(max(self.min_linear_speed, min(self.max_linear_speed, abs(linear_speed))), linear_speed) """
-
+            D = distanceToGoal
         else:
             self.move_cmd.linear.x = self.slow_down_factor
 
-        # rospy.loginfo("PID:(%5.3f,%5.3f),error(%2.3f,%2.3f),",I,D,distanceToGoal,error_d)
-
         if (abs(position.x) > self.x_threshold):
             # Compute the linear component of the movement
-            angular_speed = -position.x * self.x_scale
+            Dt = -position.x-Dt
+            angular_speed = -position.x * self.kpt + self.kdt * Dt
 
             # Make sure we meet our min/max specifications
             self.move_cmd.angular.z = copysign(max(self.min_angular_speed, min(
                 self.max_angular_speed, abs(angular_speed))), angular_speed)
-
+            Dt = -position.x
         else:
             # Stop the rotation smoothly
             self.move_cmd.angular.z = self.slow_down_factor
@@ -140,15 +128,9 @@ class Follower():
         #rospy.loginfo("speed: [%5.2f]" ,self.move_cmd.linear.x/self.max_linear_speed*100);
 
         # rate.sleep()
-        #error_d = distanceToGoal
 
     def shutdown(self):
         rospy.loginfo("Stopping the robot...")
-
-        # Unregister the subscriber to stop cmd_vel publishing
-        # self.depth_subscriber.unregister()
-        rospy.sleep(1)
-
         # Send an emtpy Twist message to stop the robot
         self.cmd_vel_pub.publish(Twist())
         rospy.sleep(1)

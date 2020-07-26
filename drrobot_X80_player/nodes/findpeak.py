@@ -59,7 +59,7 @@ class FINDPEAK():
 
     def set_tracker(self, position):
         posmsg = Point()
-        global valley, peak, ip, iv, ip_Location, iv_Location, steps, trajectory, PosX, PosY,init_rot
+        global valley, peak, ip, iv, ip_Location, iv_Location, steps, trajectory, PosX, PosY, init_rot
 
         if self.track == False:
             # print("ok")
